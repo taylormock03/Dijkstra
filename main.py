@@ -1,5 +1,9 @@
 import pyinputplus
+from pathLogic import *
 
-age = pyinputplus.inputNum(prompt='Test')
+done = ""
 
-print(age)
+while done != "done":
+    # Add paths to the network
+    done = pyinputplus.inputCustom(validatePath, prompt="Create a path (e.g. A,B,15 means the cost of going from A to B is 15) > ", postValidateApplyFunc=addPath)
+    
