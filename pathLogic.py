@@ -1,3 +1,13 @@
+
+from prettytable import PrettyTable
+
+def getNodes(paths):
+    nodes = []
+    for x in paths:
+        nodes.append(x)
+
+    return nodes
+
 def validatePath(path:str):
     path = path.split(",")
 
@@ -38,8 +48,13 @@ def addPath(paths, newPath):
     return 
 
 def calculatePaths(paths, startPoint, visitedNodes = [], costs = {}):
-    # printTableHead(paths, startPoint)
-    
+    header = ["Step", "N*"]
+    for node in paths:
+        header.append("Cost to get to "+node)
+    table = PrettyTable(header)
+
+    step=0
+
     if len(visitedNodes) ==0:
         visitedNodes = [startPoint]
 
@@ -52,13 +67,16 @@ def calculatePaths(paths, startPoint, visitedNodes = [], costs = {}):
         else:
             costs[node] = "inf"
     
-    print (costs)
     
     closestNeighbour,closestCost = getClosestNeighbour(costs, visitedNodes)
     visitedNodes.append(closestNeighbour)
-    print(visitedNodes)
-
-    print (costs)
+    
+    row = [step]
+    row.append(''.join(visitedNodes))
+    for node in costs:
+        row.append(costs[node])
+    table.add_row(row)
+    step+=1
 
     while closestNeighbour!=-1:
         for x in paths[closestNeighbour]:
@@ -69,11 +87,16 @@ def calculatePaths(paths, startPoint, visitedNodes = [], costs = {}):
                 costs[x]= paths[closestNeighbour][x]+closestCost
 
         closestNeighbour,closestCost = getClosestNeighbour(costs, visitedNodes)
-        visitedNodes.append(closestNeighbour)
+        if closestNeighbour!=-1:
+            visitedNodes.append(closestNeighbour)
+        row = [step]
+        row.append(''.join(visitedNodes))
+        for node in costs:
+            row.append(costs[node])
+        table.add_row(row)
+        step+=1
 
-    print (costs)
-    # printTableLine(shortestPath)
-    
+    print(table)    
 
 def getClosestNeighbour(neighbours, visitedNodes):
     closestNeighbour=False
@@ -86,5 +109,3 @@ def getClosestNeighbour(neighbours, visitedNodes):
             closestNeighbour=x
     if closestNeighbour ==False: return -1,-1 
     else: return closestNeighbour,minCost
-
-calculatePaths(paths={'A': {'B': 1, 'C': 5}, 'B': {'A': 1, 'C': 3, 'D': 13}, 'C': {'A': 2, 'B': 3, 'D': 95}, 'D': {'C': 95}}, startPoint="A")

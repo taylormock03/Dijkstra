@@ -14,4 +14,13 @@ while newPath != "done":
     if newPath != "done":
         addPath(paths,newPath)
 
-print(paths)
+
+node = "0"
+choices = getNodes(paths)
+choices.append("quit")
+while node!="quit":
+    node = pyinputplus.inputMenu(choices, prompt="Which Node would you like to calculate for? > \n", )
+    
+    if node!="quit":
+        calculatePaths(paths,node)
+        print()
